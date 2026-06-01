@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- Google Picker API -->
+  <script src="https://apis.google.com/js/api.js" async defer></script>
 
   <style>
     :root {
@@ -33,7 +35,6 @@
       background: var(--denim-deep);
       color: var(--cream);
       min-height: 100vh;
-      /* Selvedge stripe */
       border-left: 5px solid transparent;
       border-image: repeating-linear-gradient(
         to bottom,
@@ -42,10 +43,8 @@
       ) 1;
     }
 
-    /* ─── TYPOGRAPHY ─── */
     .serif { font-family: 'Playfair Display', serif; }
 
-    /* ─── LAYOUT SHELLS ─── */
     .full-center {
       display: flex;
       align-items: center;
@@ -63,7 +62,6 @@
       max-width: 460px;
     }
 
-    /* ─── WORDMARK ─── */
     .wordmark {
       font-family: 'Playfair Display', serif;
       font-size: 2rem;
@@ -79,7 +77,6 @@
       margin-top: 2px;
     }
 
-    /* ─── FORM ─── */
     .field-label {
       display: block;
       font-size: 0.65rem;
@@ -109,7 +106,6 @@
     textarea { resize: vertical; }
     select option { background: var(--denim-deep); }
 
-    /* ─── BUTTONS ─── */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -140,10 +136,8 @@
     .btn-ghost:hover:not(:disabled) { background: var(--raised); border-color: var(--brass); color: var(--cream); }
 
     .btn-sm { padding: 0.5rem 1rem; font-size: 0.7rem; width: auto; }
-
     .btn-row { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
 
-    /* ─── ALERT / STATUS ─── */
     .alert {
       background: var(--raised);
       border-left: 3px solid var(--brass);
@@ -155,7 +149,6 @@
     }
     .alert.err { border-left-color: var(--selvedge); }
 
-    /* ─── SPINNER ─── */
     .spinner {
       display: inline-block;
       width: 14px; height: 14px;
@@ -176,7 +169,6 @@
       padding: 1rem 0;
     }
 
-    /* ─── APP CHROME ─── */
     #screen-app { display: flex; flex-direction: column; min-height: 100vh; }
 
     header {
@@ -196,10 +188,7 @@
       color: var(--brass);
       letter-spacing: 0.04em;
     }
-    .nav {
-      display: flex;
-      gap: 2px;
-    }
+    .nav { display: flex; gap: 2px; }
     .nav-btn {
       background: none;
       border: none;
@@ -230,7 +219,6 @@
       letter-spacing: 0.05em;
     }
 
-    /* ─── SCREEN HEADINGS ─── */
     .screen-head { margin-bottom: 1.5rem; }
     .screen-title {
       font-family: 'Playfair Display', serif;
@@ -243,43 +231,57 @@
       margin-top: 0.25rem;
     }
 
-    /* ─── ALBUM PICKER ─── */
-    #screen-albums { max-width: 520px; }
+    /* ─── IMPORT SCREEN ─── */
+    #screen-import { max-width: 520px; }
 
-    .album-list { display: flex; flex-direction: column; gap: 0.5rem; margin: 1.25rem 0 1.5rem; }
-
-    .album-item {
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
+    .import-hero {
       background: var(--surface);
+      border: 2px dashed var(--denim-fade);
+      border-radius: 3px;
+      padding: 3rem 2rem;
+      text-align: center;
+      margin: 1.5rem 0;
+      transition: border-color 0.2s;
+    }
+    .import-hero:hover { border-color: var(--brass); }
+    .import-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      opacity: 0.6;
+    }
+    .import-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--brass);
+      margin-bottom: 0.4rem;
+    }
+    .import-sub {
+      font-size: 0.78rem;
+      color: var(--weft);
+      margin-bottom: 1.5rem;
+    }
+
+    .import-stats {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat-pill {
+      background: var(--raised);
       border: 1px solid var(--denim-fade);
       border-radius: 2px;
-      padding: 0.7rem 1rem;
-      cursor: pointer;
-      transition: all 0.15s;
-      user-select: none;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.72rem;
+      color: var(--weft);
+      flex: 1;
+      text-align: center;
     }
-    .album-item:hover { border-color: var(--brass); }
-    .album-item.selected { border-color: var(--brass); background: var(--raised); }
-
-    .album-thumb {
-      width: 44px; height: 44px;
-      object-fit: cover;
-      border-radius: 2px;
-      background: var(--denim-mid);
-      flex-shrink: 0;
+    .stat-pill strong {
+      display: block;
+      font-size: 1.1rem;
+      color: var(--brass);
+      font-family: 'Playfair Display', serif;
     }
-    .album-name { font-size: 0.88rem; }
-    .album-count { font-size: 0.72rem; color: var(--weft); margin-top: 1px; }
-    .check-dot {
-      margin-left: auto;
-      width: 18px; height: 18px;
-      border: 2px solid var(--denim-fade);
-      border-radius: 50%;
-      transition: all 0.15s;
-    }
-    .album-item.selected .check-dot { background: var(--brass); border-color: var(--brass); }
 
     /* ─── WARDROBE GRID ─── */
     .filter-bar {
@@ -329,9 +331,7 @@
       background: var(--denim-mid);
     }
 
-    .item-foot {
-      padding: 0.6rem 0.7rem;
-    }
+    .item-foot { padding: 0.6rem 0.7rem; }
     .item-desc {
       font-size: 0.72rem;
       color: var(--cream);
@@ -489,7 +489,6 @@
       margin-bottom: 0.75rem;
     }
 
-    /* ─── SLOT MODAL ─── */
     .overlay {
       position: fixed;
       inset: 0;
@@ -523,7 +522,6 @@
       margin-bottom: 1rem;
     }
 
-    /* ─── DETAIL MODAL ─── */
     .detail-img {
       width: 100%;
       max-height: 260px;
@@ -533,14 +531,12 @@
       background: var(--denim-mid);
     }
 
-    /* ─── EMPTY STATE ─── */
     .empty {
       color: var(--weft);
       font-size: 0.82rem;
       padding: 2rem 0;
     }
 
-    /* ─── UTILITY ─── */
     .hidden { display: none !important; }
     .mt1 { margin-top: 0.75rem; }
     .gap { gap: 0.5rem; }
@@ -549,27 +545,20 @@
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     SETUP SCREEN
-══════════════════════════════════════ -->
+<!-- SETUP -->
 <div id="screen-setup" class="full-center">
   <div class="card">
     <div class="wordmark">Wardrobe</div>
     <div class="submark">Your closet. Curated.</div>
-
     <label class="field-label">Google OAuth Client ID</label>
     <input type="text" id="setup-client-id" placeholder="your-id.apps.googleusercontent.com">
-
     <label class="field-label">Gemini API Key</label>
     <input type="password" id="setup-gemini-key" placeholder="AIza...">
-
     <button class="btn" onclick="saveSetup()">Continue →</button>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     AUTH SCREEN
-══════════════════════════════════════ -->
+<!-- AUTH -->
 <div id="screen-auth" class="full-center hidden">
   <div class="card">
     <div class="wordmark">Wardrobe</div>
@@ -581,9 +570,7 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     MAIN APP
-══════════════════════════════════════ -->
+<!-- MAIN APP -->
 <div id="screen-app" class="hidden">
   <header>
     <div class="header-wordmark">Wardrobe</div>
@@ -596,16 +583,27 @@
 
   <div class="main-content">
 
-    <!-- ALBUM PICKER -->
-    <div id="screen-albums">
+    <!-- IMPORT / HOME -->
+    <div id="screen-import">
       <div class="screen-head">
-        <div class="screen-title">Choose Albums</div>
-        <div class="screen-sub">Select your wardrobe albums from Google Photos.</div>
+        <div class="screen-title">Your Closet</div>
+        <div class="screen-sub">Add clothes from Google Photos, then tag and style them.</div>
       </div>
-      <div id="album-list" class="album-list">
-        <div class="loading-row"><div class="spinner"></div> Loading albums…</div>
+
+      <div id="import-stats" class="import-stats hidden">
+        <div class="stat-pill"><strong id="stat-total">0</strong>Items</div>
+        <div class="stat-pill"><strong id="stat-tagged">0</strong>Tagged</div>
+        <div class="stat-pill"><strong id="stat-untagged">0</strong>Untagged</div>
       </div>
-      <button class="btn" onclick="confirmAlbums()">Load Wardrobe →</button>
+
+      <div class="import-hero" onclick="openPicker()">
+        <div class="import-icon">📸</div>
+        <div class="import-title">Add from Google Photos</div>
+        <div class="import-sub">Opens the Google Photos picker — select as many lay-flat shots as you like.</div>
+        <button class="btn btn-sm" style="width:auto;margin:0 auto;" onclick="event.stopPropagation();openPicker()">Choose Photos →</button>
+      </div>
+
+      <div id="import-grid" class="wardrobe-grid"></div>
     </div>
 
     <!-- WARDROBE / CLOSET -->
@@ -618,6 +616,9 @@
         <div class="chip" onclick="filterBy('shoes',this)">Shoes</div>
         <div class="chip" onclick="filterBy('accessories',this)">Accessories</div>
         <div class="chip" onclick="filterBy('untagged',this)">Untagged</div>
+      </div>
+      <div style="margin-bottom:1rem;">
+        <button class="btn btn-ghost btn-sm" onclick="showSub('import')">+ Add More Photos</button>
       </div>
       <div id="wardrobe-grid" class="wardrobe-grid"></div>
     </div>
@@ -639,16 +640,16 @@
       </div>
 
       <div class="slot-grid">
-        <div class="outfit-slot" id="slot-tops"      onclick="openPicker('tops')">
+        <div class="outfit-slot" id="slot-tops"      onclick="openSlotPicker('tops')">
           <div class="slot-icon">👕</div><div class="slot-lbl">Top</div>
         </div>
-        <div class="outfit-slot" id="slot-bottoms"   onclick="openPicker('bottoms')">
+        <div class="outfit-slot" id="slot-bottoms"   onclick="openSlotPicker('bottoms')">
           <div class="slot-icon">👖</div><div class="slot-lbl">Bottom</div>
         </div>
-        <div class="outfit-slot" id="slot-shoes"     onclick="openPicker('shoes')">
+        <div class="outfit-slot" id="slot-shoes"     onclick="openSlotPicker('shoes')">
           <div class="slot-icon">👟</div><div class="slot-lbl">Shoes</div>
         </div>
-        <div class="outfit-slot" id="slot-outerwear" onclick="openPicker('outerwear')">
+        <div class="outfit-slot" id="slot-outerwear" onclick="openSlotPicker('outerwear')">
           <div class="slot-icon">🧥</div><div class="slot-lbl">Outer</div>
         </div>
       </div>
@@ -662,28 +663,24 @@
       <div id="tryon-output"></div>
     </div>
 
-  </div><!-- /main-content -->
+  </div>
 
   <div class="status-bar">
     <span id="status-msg">Ready</span>
     <span id="status-count"></span>
   </div>
-</div><!-- /screen-app -->
+</div>
 
-<!-- ══════════════════════════════════════
-     SLOT PICKER MODAL
-══════════════════════════════════════ -->
+<!-- SLOT PICKER MODAL -->
 <div id="modal-picker" class="overlay hidden">
   <div class="modal">
     <div class="modal-title" id="picker-title">Select Item</div>
     <div id="picker-grid" class="modal-grid"></div>
-    <button class="btn btn-ghost btn-sm" onclick="closePicker()">Cancel</button>
+    <button class="btn btn-ghost btn-sm" onclick="closeSlotPicker()">Cancel</button>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     ITEM DETAIL MODAL
-══════════════════════════════════════ -->
+<!-- ITEM DETAIL MODAL -->
 <div id="modal-detail" class="overlay hidden">
   <div class="modal">
     <div class="modal-title">Edit Item</div>
@@ -714,13 +711,12 @@
 // ═══════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════
-let CFG  = { clientId: '', geminiKey: '' };
+let CFG   = { clientId: '', geminiKey: '' };
 let TOKEN = null;
 
 let W = {
-  version: 2,
-  albumIds: [],
-  items: {},          // id → item object
+  version: 3,
+  items: {},
   driveFileId: null
 };
 
@@ -729,8 +725,10 @@ let UI = {
   taggerQueue: [],
   taggerIdx: 0,
   slots: { tops: null, bottoms: null, shoes: null, outerwear: null },
-  pickerCategory: null
+  slotPickerCategory: null
 };
+
+let pickerApiLoaded = false;
 
 
 // ═══════════════════════════════════════════════════════
@@ -766,7 +764,7 @@ function showSetup() {
 
 
 // ═══════════════════════════════════════════════════════
-// AUTH
+// AUTH  — Drive + Picker scopes only (no photoslibrary)
 // ═══════════════════════════════════════════════════════
 let tokenClient;
 
@@ -775,10 +773,10 @@ function waitForGSI() {
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: CFG.clientId,
     scope: [
-      'https://www.googleapis.com/auth/photoslibrary.readonly',
-      'https://www.googleapis.com/auth/drive.appdata'
+      'https://www.googleapis.com/auth/drive.appdata',
+      'https://www.googleapis.com/auth/drive.readonly',   // needed to fetch picker file URLs
     ].join(' '),
-    include_granted_scopes: false, 
+    include_granted_scopes: false,
     callback: onToken
   });
 }
@@ -795,33 +793,83 @@ function onToken(resp) {
   if (resp.error) { alert('Auth error: ' + resp.error); return; }
   TOKEN = resp.access_token;
   show('app');
+  loadPickerApi();
   loadData();
 }
 
 
 // ═══════════════════════════════════════════════════════
-// SCREEN MANAGEMENT
+// GOOGLE PICKER API
 // ═══════════════════════════════════════════════════════
-function show(screen) {
-  ['setup','auth','app'].forEach(s =>
-    id('screen-' + s).classList.toggle('hidden', s !== screen)
-  );
+function loadPickerApi() {
+  if (typeof gapi === 'undefined') {
+    setTimeout(loadPickerApi, 300);
+    return;
+  }
+  gapi.load('picker', () => { pickerApiLoaded = true; });
 }
 
-function showSub(sub) {
-  ['albums','closet','tagger','builder'].forEach(s =>
-    id('screen-' + s).classList.toggle('hidden', s !== sub)
-  );
-  const map = { closet:'closet', tagger:'tagger', builder:'outfit' };
-  ['nav-closet','nav-outfit','nav-tagger'].forEach(b =>
-    id(b).classList.remove('active')
-  );
-  if (map[sub]) id('nav-' + map[sub]).classList.add('active');
+function openPicker() {
+  if (!pickerApiLoaded) {
+    setStatus('Picker loading, please wait…');
+    setTimeout(openPicker, 500);
+    return;
+  }
+
+  const picker = new google.picker.PickerBuilder()
+    .setOAuthToken(TOKEN)
+    .setAppId(CFG.clientId.split('-')[0])  // numeric project id
+    .addView(
+      new google.picker.PhotosView()
+        .setType(google.picker.PhotosView.Type.PHOTOS)
+    )
+    .addView(new google.picker.DocsUploadView())
+    .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+    .setCallback(pickerCallback)
+    .build();
+
+  picker.setVisible(true);
 }
 
-function showCloset()  { showSub('closet');  renderGrid(); }
-function showOutfit()  { showSub('builder'); }
-function showTagger()  { showSub('tagger');  initTagger(); }
+async function pickerCallback(data) {
+  if (data.action !== google.picker.Action.PICKED) return;
+  const docs = data.docs || [];
+  if (!docs.length) return;
+
+  setStatus(`Importing ${docs.length} photo${docs.length > 1 ? 's' : ''}…`);
+  let added = 0;
+
+  for (const doc of docs) {
+    const itemId = doc.id;
+    if (W.items[itemId]) continue; // already in wardrobe
+
+    // Get a usable image URL via Drive thumbnail
+    // doc.thumbnails is an array sorted smallest→largest
+    const thumbs = doc.thumbnails || [];
+    const thumb  = thumbs.length ? thumbs[thumbs.length - 1].url : (doc.url || '');
+
+    W.items[itemId] = {
+      id:          itemId,
+      name:        doc.name || '',
+      thumb:       thumb,
+      driveUrl:    doc.url  || '',
+      mimeType:    doc.mimeType || 'image/jpeg',
+      tagged:      false,
+      description: '',
+      category:    '',
+      tags:        [],
+      userNotes:   ''
+    };
+    added++;
+  }
+
+  if (added > 0) {
+    await saveData();
+    renderImportGrid();
+    updateCount();
+    setStatus(`Added ${added} item${added > 1 ? 's' : ''}`);
+  }
+}
 
 
 // ═══════════════════════════════════════════════════════
@@ -840,21 +888,22 @@ async function loadData() {
         `https://www.googleapis.com/drive/v3/files/${W.driveFileId}?alt=media`
       );
       W = { ...W, ...content };
-      setStatus('Loaded ' + Object.keys(W.items).length + ' items');
-      if (W.albumIds && W.albumIds.length > 0) {
-        await refreshBaseUrls();
+      const n = Object.keys(W.items).length;
+      setStatus(`Loaded ${n} item${n !== 1 ? 's' : ''}`);
+      if (n > 0) {
         showSub('closet');
         renderGrid();
       } else {
-        await loadAlbums();
+        showSub('import');
       }
     } else {
-      await loadAlbums();
+      showSub('import');
+      setStatus('Ready — add your first photos');
     }
   } catch (e) {
     console.error(e);
-    setStatus('Load error — retrying albums');
-    await loadAlbums();
+    showSub('import');
+    setStatus('Could not load saved data');
   }
 }
 
@@ -865,7 +914,7 @@ async function saveData() {
       await fetch(
         `https://www.googleapis.com/upload/drive/v3/files/${W.driveFileId}?uploadType=media`,
         { method: 'PATCH',
-          headers: { 'Authorization': 'Bearer ' + TOKEN, 'Content-Type': 'application/json' },
+          headers: { Authorization: 'Bearer ' + TOKEN, 'Content-Type': 'application/json' },
           body }
       );
     } else {
@@ -875,7 +924,7 @@ async function saveData() {
       form.append('file',     new Blob([body],                  { type: 'application/json' }));
       const r = await fetch(
         'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',
-        { method: 'POST', headers: { 'Authorization': 'Bearer ' + TOKEN }, body: form }
+        { method: 'POST', headers: { Authorization: 'Bearer ' + TOKEN }, body: form }
       );
       const d = await r.json();
       W.driveFileId = d.id;
@@ -889,95 +938,67 @@ async function saveData() {
 
 
 // ═══════════════════════════════════════════════════════
-// GOOGLE PHOTOS
+// SCREEN MANAGEMENT
 // ═══════════════════════════════════════════════════════
-async function loadAlbums() {
-  showSub('albums');
-  const list = id('album-list');
-  list.innerHTML = '<div class="loading-row"><div class="spinner"></div> Loading albums…</div>';
-  try {
-    const data = await gGet('https://photoslibrary.googleapis.com/v1/albums?pageSize=50');
-    const albums = data.albums || [];
-    list.innerHTML = '';
-    albums.forEach(a => {
-      const el = document.createElement('div');
-      el.className = 'album-item';
-      el.dataset.id = a.id;
-      el.innerHTML = `
-        ${a.coverPhotoBaseUrl
-          ? `<img class="album-thumb" src="${a.coverPhotoBaseUrl}=w88-h88-c" alt="">`
-          : '<div class="album-thumb"></div>'}
-        <div>
-          <div class="album-name">${a.title || 'Untitled'}</div>
-          <div class="album-count">${a.mediaItemsCount || '?'} items</div>
-        </div>
-        <div class="check-dot"></div>
-      `;
-      el.onclick = () => el.classList.toggle('selected');
-      list.appendChild(el);
-    });
-    if (albums.length === 0) {
-      list.innerHTML = '<div class="empty">No albums found. Create an album in Google Photos first.</div>';
-    }
-    setStatus('Select your wardrobe albums');
-  } catch (e) {
-    list.innerHTML = '<div class="alert err">Failed to load albums. Make sure Google Photos Library API is enabled in your Cloud project.</div>';
-    console.error(e);
-  }
+function show(screen) {
+  ['setup','auth','app'].forEach(s =>
+    id('screen-' + s).classList.toggle('hidden', s !== screen)
+  );
 }
 
-async function confirmAlbums() {
-  const selected = [...document.querySelectorAll('.album-item.selected')];
-  if (!selected.length) { alert('Select at least one album.'); return; }
-  W.albumIds = selected.map(el => el.dataset.id);
-  setStatus('Loading photos…');
-  await fetchAllPhotos();
-  await saveData();
+function showSub(sub) {
+  ['import','closet','tagger','builder'].forEach(s =>
+    id('screen-' + s).classList.toggle('hidden', s !== sub)
+  );
+  const map = { closet:'closet', import:'closet', tagger:'tagger', builder:'outfit' };
+  ['nav-closet','nav-outfit','nav-tagger'].forEach(b => id(b).classList.remove('active'));
+  if (map[sub]) id('nav-' + map[sub]).classList.add('active');
+}
+
+function showCloset() {
+  const n = Object.keys(W.items).length;
+  if (n === 0) { showSub('import'); return; }
   showSub('closet');
   renderGrid();
 }
+function showOutfit()  { showSub('builder'); }
+function showTagger()  { showSub('tagger');  initTagger(); }
 
-async function fetchAllPhotos() {
-  for (const albumId of W.albumIds) {
-    let pageToken = null;
-    do {
-      const body = { albumId, pageSize: 100 };
-      if (pageToken) body.pageToken = pageToken;
-      const data = await gPost('https://photoslibrary.googleapis.com/v1/mediaItems:search', body);
-      (data.mediaItems || []).forEach(item => {
-        if (!W.items[item.id]) {
-          W.items[item.id] = {
-            id: item.id,
-            baseUrl: item.baseUrl,
-            tagged: false,
-            description: '',
-            category: '',
-            tags: [],
-            userNotes: ''
-          };
-        } else {
-          W.items[item.id].baseUrl = item.baseUrl;
-        }
-      });
-      pageToken = data.nextPageToken;
-    } while (pageToken);
+
+// ═══════════════════════════════════════════════════════
+// IMPORT GRID (shown on the import/home screen)
+// ═══════════════════════════════════════════════════════
+function renderImportGrid() {
+  const grid  = id('import-grid');
+  const items = Object.values(W.items).slice(-12).reverse(); // show last 12 added
+  const stats = id('import-stats');
+
+  if (items.length > 0) {
+    stats.classList.remove('hidden');
+    id('stat-total').textContent    = Object.keys(W.items).length;
+    id('stat-tagged').textContent   = Object.values(W.items).filter(i => i.tagged).length;
+    id('stat-untagged').textContent = Object.values(W.items).filter(i => !i.tagged).length;
   }
-  updateCount();
-}
 
-async function refreshBaseUrls() {
-  // Re-list albums to get fresh CDN URLs (they expire after ~1hr)
-  for (const albumId of W.albumIds) {
-    let pageToken = null;
-    do {
-      const body = { albumId, pageSize: 100 };
-      if (pageToken) body.pageToken = pageToken;
-      const data = await gPost('https://photoslibrary.googleapis.com/v1/mediaItems:search', body);
-      (data.mediaItems || []).forEach(item => {
-        if (W.items[item.id]) W.items[item.id].baseUrl = item.baseUrl;
-      });
-      pageToken = data.nextPageToken;
-    } while (pageToken);
+  grid.innerHTML = '';
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'item-card';
+    card.innerHTML = `
+      ${!item.tagged ? '<div class="untagged-pill">Untagged</div>' : ''}
+      <img class="item-img" src="${item.thumb}" loading="lazy" onerror="this.src=''" alt="">
+      <div class="item-foot">
+        <div class="item-desc">${item.description || item.name || 'Untagged item'}</div>
+      </div>`;
+    card.onclick = () => openDetail(item);
+    grid.appendChild(card);
+  });
+
+  if (items.length > 0) {
+    const viewAll = document.createElement('div');
+    viewAll.style = 'grid-column:1/-1;margin-top:0.5rem;';
+    viewAll.innerHTML = `<button class="btn btn-ghost btn-sm" onclick="showCloset()">View all ${Object.keys(W.items).length} items →</button>`;
+    grid.appendChild(viewAll);
   }
 }
 
@@ -986,10 +1007,10 @@ async function refreshBaseUrls() {
 // WARDROBE GRID
 // ═══════════════════════════════════════════════════════
 function renderGrid(filter = UI.filter) {
-  const grid = id('wardrobe-grid');
+  const grid  = id('wardrobe-grid');
   const items = Object.values(W.items);
   const shown = items.filter(item => {
-    if (filter === 'all')     return true;
+    if (filter === 'all')      return true;
     if (filter === 'untagged') return !item.tagged;
     return item.category === filter;
   });
@@ -999,17 +1020,15 @@ function renderGrid(filter = UI.filter) {
     const card = document.createElement('div');
     card.className = 'item-card';
     card.innerHTML = `
-      ${!item.tagged ? '<div class="untagged-pill">Untag</div>' : ''}
-      <img class="item-img" src="${item.baseUrl}=w400" loading="lazy"
-           onerror="this.src=''" alt="${item.description || ''}">
+      ${!item.tagged ? '<div class="untagged-pill">Untagged</div>' : ''}
+      <img class="item-img" src="${item.thumb}" loading="lazy" onerror="this.src=''" alt="${item.description || ''}">
       <div class="item-foot">
-        <div class="item-desc">${item.description || 'Untagged item'}</div>
+        <div class="item-desc">${item.description || item.name || 'Untagged item'}</div>
         <div class="tag-row">
           ${item.category ? `<span class="tag cat">${item.category}</span>` : ''}
-          ${item.tags.slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
+          ${(item.tags||[]).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
         </div>
-      </div>
-    `;
+      </div>`;
     card.onclick = () => openDetail(item);
     grid.appendChild(card);
   });
@@ -1032,11 +1051,11 @@ function filterBy(cat, el) {
 // ITEM DETAIL MODAL
 // ═══════════════════════════════════════════════════════
 function openDetail(item) {
-  id('detail-id').value     = item.id;
-  id('detail-img').src      = item.baseUrl + '=w600';
-  id('detail-desc').value   = item.description || '';
-  id('detail-cat').value    = item.category    || '';
-  id('detail-notes').value  = item.userNotes   || '';
+  id('detail-id').value    = item.id;
+  id('detail-img').src     = item.thumb;
+  id('detail-desc').value  = item.description || '';
+  id('detail-cat').value   = item.category    || '';
+  id('detail-notes').value = item.userNotes   || '';
   id('modal-detail').classList.remove('hidden');
 }
 
@@ -1051,6 +1070,7 @@ function saveDetail() {
   closeDetail();
   saveData();
   renderGrid();
+  renderImportGrid();
 }
 
 
@@ -1070,9 +1090,7 @@ function renderTagger() {
 
   if (total === 0) {
     body.innerHTML = `
-      <div class="alert">All items are tagged! Add new photos to your album and click Reload.</div>
-      <button class="btn btn-ghost btn-sm" onclick="reloadAndRetag()">Reload from Photos</button>
-    `;
+      <div class="alert">All items are tagged! Add new photos from the Closet screen.</div>`;
     return;
   }
 
@@ -1086,19 +1104,18 @@ function renderTagger() {
       <button class="btn btn-sm" id="btn-tag-all" onclick="tagAll()">Tag All</button>
       <button class="btn btn-ghost btn-sm" onclick="tagOne()">Tag Next</button>
     </div>
-    <div id="tag-preview-area"></div>
-  `;
+    <div id="tag-preview-area"></div>`;
 }
 
 async function tagOne() {
   if (UI.taggerIdx >= UI.taggerQueue.length) { renderTagger(); return; }
-  const item  = UI.taggerQueue[UI.taggerIdx];
-  const area  = id('tag-preview-area');
+  const item = UI.taggerQueue[UI.taggerIdx];
+  const area = id('tag-preview-area');
   if (!area) return;
 
   area.innerHTML = `
     <div class="tag-preview">
-      <img class="tag-preview-img" src="${item.baseUrl}=w400">
+      <img class="tag-preview-img" src="${item.thumb}">
       <div class="loading-row"><div class="spinner"></div> Asking Gemini…</div>
     </div>`;
 
@@ -1108,10 +1125,9 @@ async function tagOne() {
     UI.taggerIdx++;
     await saveData();
 
-    // Show result briefly then re-render
     area.innerHTML = `
       <div class="tag-preview">
-        <img class="tag-preview-img" src="${item.baseUrl}=w400">
+        <img class="tag-preview-img" src="${item.thumb}">
         <div class="tag-result">
           <div class="tag-result-desc">${result.description}</div>
           <div class="tag-pills">${result.tags.map(t => `<span class="tag-pill">${t}</span>`).join('')}</div>
@@ -1139,47 +1155,37 @@ async function tagAll() {
   while (UI.taggerIdx < UI.taggerQueue.length) {
     const item = UI.taggerQueue[UI.taggerIdx];
     const area = id('tag-preview-area');
-
     if (area) {
       area.innerHTML = `
         <div class="tag-preview">
-          <img class="tag-preview-img" src="${item.baseUrl}=w400">
+          <img class="tag-preview-img" src="${item.thumb}">
           <div class="loading-row"><div class="spinner"></div>
             Tagging ${UI.taggerIdx + 1} of ${UI.taggerQueue.length}…
           </div>
         </div>`;
     }
-
     try {
       const result = await geminiTag(item);
       Object.assign(W.items[item.id], result, { tagged: true });
       UI.taggerIdx++;
-
       const fill = id('prog-fill');
       const txt  = id('prog-txt');
       const pct  = Math.round((UI.taggerIdx / UI.taggerQueue.length) * 100);
       if (fill) fill.style.width = pct + '%';
       if (txt)  txt.textContent  = `${UI.taggerIdx} of ${UI.taggerQueue.length} tagged`;
-
       await saveData();
     } catch (e) {
-      console.warn('Skip item on error:', e.message);
-      UI.taggerIdx++; // skip and continue
+      console.warn('Skip item:', e.message);
+      UI.taggerIdx++;
     }
-    await pause(400); // be polite to the API
+    await pause(400);
   }
   renderTagger();
 }
 
-async function reloadAndRetag() {
-  setStatus('Reloading photos…');
-  await fetchAllPhotos();
-  await saveData();
-  initTagger();
-}
-
 async function geminiTag(item) {
-  const b64 = await urlToBase64(item.baseUrl + '=w600');
+  // Fetch image via Drive API (authenticated) and convert to base64
+  const b64 = await driveFileToBase64(item.id, item.mimeType || 'image/jpeg');
 
   const prompt = `This is a lay-flat photo of a single clothing item.
 Return ONLY a valid JSON object with these exact keys:
@@ -1198,7 +1204,7 @@ No markdown, no extra text. Only the JSON object.`;
       body: JSON.stringify({
         contents: [{ parts: [
           { text: prompt },
-          { inline_data: { mime_type: 'image/jpeg', data: b64 } }
+          { inline_data: { mime_type: item.mimeType || 'image/jpeg', data: b64 } }
         ]}]
       })
     }
@@ -1206,7 +1212,7 @@ No markdown, no extra text. Only the JSON object.`;
 
   const data = await resp.json();
   if (!resp.ok) throw new Error(data.error?.message || resp.status);
-  const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+  const raw   = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
   const clean = raw.replace(/```json|```/g, '').trim();
   return JSON.parse(clean);
 }
@@ -1217,10 +1223,10 @@ No markdown, no extra text. Only the JSON object.`;
 // ═══════════════════════════════════════════════════════
 const SLOT_ICONS = { tops:'👕', bottoms:'👖', shoes:'👟', outerwear:'🧥' };
 
-function openPicker(category) {
-  UI.pickerCategory = category;
+function openSlotPicker(category) {
+  UI.slotPickerCategory = category;
   id('picker-title').textContent = 'Select ' + category;
-  const grid = id('picker-grid');
+  const grid  = id('picker-grid');
   const items = Object.values(W.items).filter(i => i.category === category);
   grid.innerHTML = '';
 
@@ -1231,26 +1237,26 @@ function openPicker(category) {
       const card = document.createElement('div');
       card.className = 'item-card';
       card.innerHTML = `
-        <img class="item-img" src="${item.baseUrl}=w300" loading="lazy" alt="">
+        <img class="item-img" src="${item.thumb}" loading="lazy" alt="">
         <div class="item-foot">
           <div class="item-desc">${item.description || 'Item'}</div>
         </div>`;
-      card.onclick = () => pickItem(item);
+      card.onclick = () => pickSlotItem(item);
       grid.appendChild(card);
     });
   }
   id('modal-picker').classList.remove('hidden');
 }
 
-function pickItem(item) {
-  const cat  = UI.pickerCategory;
+function pickSlotItem(item) {
+  const cat  = UI.slotPickerCategory;
   UI.slots[cat] = item;
   const slot = id('slot-' + cat);
   slot.classList.add('filled');
   slot.innerHTML = `
-    <img src="${item.baseUrl}=w400" alt="">
+    <img src="${item.thumb}" alt="">
     <button class="slot-clear" onclick="clearSlot('${cat}');event.stopPropagation()">✕</button>`;
-  closePicker();
+  closeSlotPicker();
 }
 
 function clearSlot(cat) {
@@ -1260,7 +1266,7 @@ function clearSlot(cat) {
   slot.innerHTML = `<div class="slot-icon">${SLOT_ICONS[cat]}</div><div class="slot-lbl">${cat}</div>`;
 }
 
-function closePicker() { id('modal-picker').classList.add('hidden'); }
+function closeSlotPicker() { id('modal-picker').classList.add('hidden'); }
 
 
 // ═══════════════════════════════════════════════════════
@@ -1274,18 +1280,16 @@ async function generateTryon() {
   if (!charFile) { alert('Upload your reference photo first.'); return; }
 
   const output = id('tryon-output');
-  output.innerHTML = '<div class="loading-row mt1"><div class="spinner"></div> Generating try-on with Nano Banana…</div>';
+  output.innerHTML = '<div class="loading-row mt1"><div class="spinner"></div> Generating try-on…</div>';
 
   try {
-    // Character reference
     const charB64  = await fileToBase64(charFile);
     const charMime = charFile.type || 'image/jpeg';
 
-    // Garment images
     const garmentParts = [];
     for (const item of filled) {
-      const b64 = await urlToBase64(item.baseUrl + '=w800');
-      garmentParts.push({ inline_data: { mime_type: 'image/jpeg', data: b64 } });
+      const b64 = await driveFileToBase64(item.id, item.mimeType || 'image/jpeg');
+      garmentParts.push({ inline_data: { mime_type: item.mimeType || 'image/jpeg', data: b64 } });
     }
 
     const outfitDesc = filled.map(i => i.description).filter(Boolean).join(', ');
@@ -1301,7 +1305,7 @@ Show the full outfit clearly from head to toe. Natural studio lighting, clean ne
     ];
 
     const resp = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${CFG.geminiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-preview-image-generation:generateContent?key=${CFG.geminiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1315,11 +1319,11 @@ Show the full outfit clearly from head to toe. Natural studio lighting, clean ne
     const data = await resp.json();
     if (!resp.ok) throw new Error(data.error?.message || resp.status);
 
-    let imgPart   = null;
-    let textPart  = '';
+    let imgPart  = null;
+    let textPart = '';
     for (const part of (data.candidates?.[0]?.content?.parts || [])) {
-      if (part.inline_data)  imgPart  = part.inline_data;
-      if (part.text)         textPart = part.text;
+      if (part.inline_data) imgPart  = part.inline_data;
+      if (part.text)        textPart = part.text;
     }
 
     if (imgPart) {
@@ -1335,7 +1339,6 @@ Show the full outfit clearly from head to toe. Natural studio lighting, clean ne
     } else {
       output.innerHTML = `<div class="alert err mt1">No image returned.${textPart ? '<br>' + textPart : ''}</div>`;
     }
-
   } catch (e) {
     output.innerHTML = `<div class="alert err mt1">Error: ${e.message}</div>`;
     console.error(e);
@@ -1346,14 +1349,9 @@ Show the full outfit clearly from head to toe. Natural studio lighting, clean ne
 // ═══════════════════════════════════════════════════════
 // UTILITIES
 // ═══════════════════════════════════════════════════════
-
-/** Fetch with Bearer auth, return parsed JSON */
 async function gGet(url) {
   const r = await fetch(url, { headers: { Authorization: 'Bearer ' + TOKEN } });
-  if (!r.ok) {
-    const t = await r.text();
-    throw new Error(`${r.status}: ${t}`);
-  }
+  if (!r.ok) { const t = await r.text(); throw new Error(`${r.status}: ${t}`); }
   return r.json();
 }
 
@@ -1363,21 +1361,21 @@ async function gPost(url, body) {
     headers: { Authorization: 'Bearer ' + TOKEN, 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
   });
-  if (!r.ok) {
-    const t = await r.text();
-    throw new Error(`${r.status}: ${t}`);
-  }
+  if (!r.ok) { const t = await r.text(); throw new Error(`${r.status}: ${t}`); }
   return r.json();
 }
 
-/** Fetch an image URL and return raw base64 (no data: prefix) */
-async function urlToBase64(url) {
-  const r    = await fetch(url);
+// Fetch a Drive file by ID using the OAuth token → base64
+async function driveFileToBase64(fileId, mimeType) {
+  const r = await fetch(
+    `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
+    { headers: { Authorization: 'Bearer ' + TOKEN } }
+  );
+  if (!r.ok) throw new Error(`Drive fetch ${r.status}`);
   const blob = await r.blob();
   return blobToBase64(blob);
 }
 
-/** Convert a Blob to raw base64 */
 function blobToBase64(blob) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -1387,7 +1385,6 @@ function blobToBase64(blob) {
   });
 }
 
-/** Convert a File to raw base64 */
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -1398,7 +1395,6 @@ function fileToBase64(file) {
 }
 
 function pause(ms) { return new Promise(r => setTimeout(r, ms)); }
-
 function id(s) { return document.getElementById(s); }
 
 function setStatus(msg) {
@@ -1414,10 +1410,6 @@ function updateCount() {
   el.textContent = `${items.length} items · ${untagged} untagged`;
 }
 
-
-// ═══════════════════════════════════════════════════════
-// BOOT
-// ═══════════════════════════════════════════════════════
 init();
 </script>
 </body>
