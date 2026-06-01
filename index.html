@@ -778,11 +778,18 @@ function waitForGSI() {
       'https://www.googleapis.com/auth/photoslibrary.readonly',
       'https://www.googleapis.com/auth/drive.appdata'
     ].join(' '),
+    include_granted_scopes: false, 
     callback: onToken
   });
 }
 
-function signIn() { tokenClient.requestAccessToken({ prompt: 'consent' }); }
+function signIn() {
+  if (TOKEN) {
+    google.accounts.oauth2.revoke(TOKEN, () => {});
+    TOKEN = null;
+  }
+  tokenClient.requestAccessToken({ prompt: 'consent' });
+}
 
 function onToken(resp) {
   if (resp.error) { alert('Auth error: ' + resp.error); return; }
