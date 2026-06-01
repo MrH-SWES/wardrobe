@@ -816,11 +816,16 @@ function openPicker() {
     return;
   }
 
+  // DOCS_IMAGES = all Drive/Photos images, works without deprecated scope
+  // User can use the picker's search box to find images by album name
+  const imgView = new google.picker.View(google.picker.ViewId.DOCS_IMAGES);
+  imgView.setMimeTypes('image/jpeg,image/png,image/webp,image/heic');
+
   const picker = new google.picker.PickerBuilder()
     .setOAuthToken(TOKEN)
     .setOrigin(window.location.protocol + '//' + window.location.host)
-    .addView(new google.picker.View(google.picker.ViewId.PHOTO_ALBUMS))
-    .addView(new google.picker.View(google.picker.ViewId.PHOTOS))
+    .setTitle('Select wardrobe photos')
+    .addView(imgView)
     .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
     .setCallback(pickerCallback)
     .build();
